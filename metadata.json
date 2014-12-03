@@ -1,0 +1,15 @@
+{
+  "name": "cewood-runit",
+  "version": "0.0.1",
+  "author": "cewood",
+  "summary": "Puppet module to create runit services",
+  "license": "Apache License, Version 2.0",
+  "source": "git@github.com:cewood/puppet-runit.git",
+  "project_page": "https://github.com/cewood/puppet-runit",
+  "issues_url": "https://github.com/cewood/puppet-runit/issues",
+  "description": "Installs and configures Runit",
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 3.0.0"},
+    {"name":"puppetlabs/apt","version_requirement":">= 1.0.0"}
+  ]
+}

@@ -1,0 +1,6 @@
+fixtures:
+  symlinks:
+    runit: "#{source_dir}"
+  forge_modules:
+    apt: "puppetlabs/apt"
+    stdlib: "puppetlabs/stdlib"

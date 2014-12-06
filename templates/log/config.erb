@@ -1,0 +1,59 @@
+### 
+## WARNING: PUPPET MANAGED FILE
+## Served by: '<%= scope.lookupvar('::servername') %>'
+##    Module: '<%= scope.to_hash['module_name'] %>'
+#
+
+# Config, source: http://smarden.org/runit/svlogd.8.html
+#
+# On startup, and after receiving a HUP signal, svlogd checks for each log directory log if the configuration file log/config exists, and if so, reads the file line by line and adjusts configuration for log as follows:
+# If the line is empty, or starts with a ‘‘#’’, it is ignored. A line of the form
+
+<% if @svlogd_size %>s<%= @svlogd_size %><% end %>
+# ssize
+# sets the maximum file size of current when svlogd should rotate the current log file to size bytes. Default is 1000000. If size is zero, svlogd doesn’t rotate log files. You should set size to at least (2 * len).
+
+<% if @svlogd_max_files %>n<%= @svlogd_max_files %><% end %>
+# nnum
+# sets the number of old log files svlogd should maintain to num. If svlogd sees more that num old log files in log after log file rotation, it deletes the oldest one. Default is 10. If num is zero, svlogd doesn’t remove old log files.
+
+<% if @svlogd_min_files %>N<%= @svlogd_min_files %><% end %>
+# Nmin
+# sets the minimum number of old log files svlogd should maintain to min. min must be less than num. If min is set, and svlogd cannot write to current because the filesystem is full, and it sees more than min old log files, it deletes the oldest one.
+
+<% if @svlogd_rotate_timeout %>t<%= @svlogd_rotate_timeout %><% end %>
+# ttimeout
+# sets the maximum age of the current log file when svlogd should rotate the current log file to timeout seconds. If current is timeout seconds old, and is not empty, svlogd forces log file rotation.
+
+<% if @svlogd_processor %>!<%= @svlogd_rotate_timeout %><% end %>
+# !processor
+# tells svlogd to feed each recent log file through processor (see above) on log file rotation. By default log files are not processed.
+
+<% if @svlogd_retransmit %>u<%= @svlogd_retransmit %><% end %>
+# ua.b.c.d[:port]
+# tells svlogd to transmit the first len characters of selected log messages to the IP address a.b.c.d, port number port. If port isn’t set, the default port for syslog is used (514). len can be set through the -l option, see below. If svlogd has trouble sending udp packets, it writes error messages to the log directory. Attention: logging through udp is unreliable, and should be used in private networks only.
+
+<% if @svlogd_forward %>U<%= @svlogd_forward %><% end %>
+# Ua.b.c.d[:port]
+# is the same as the u line above, but the log messages are no longer written to the log directory, but transmitted through udp only. Error messages from svlogd concerning sending udp packages still go to the log directory.
+
+<% if @svlogd_prefix %>p<%= @svlogd_prefix %><% end %>
+# pprefix
+# tells svlogd to prefix each line to be written to the log directory, to standard error, or through UDP, with prefix.
+
+# If a line starts with a -, +, e, or E, svlogd matches the first len characters of each log message against pattern and acts accordingly:
+#
+# -pattern
+# the log message is deselected.
+#
+# +pattern
+# the log message is selected.
+#
+# epattern
+# the log message is selected to be printed to standard error.
+#
+# Epattern
+# the log message is deselected to be printed to standard error.
+#
+# Initially each line is selected to be written to log/current. Deselected log messages are discarded from log. Initially each line is deselected to be written to standard err. Log messages selected for standard error are written to standard error.
+

@@ -1,0 +1,19 @@
+#!<%= @finsh_shell %>
+
+### 
+## WARNING: PUPPET MANAGED FILE
+## Served by: '<%= scope.lookupvar('::servername') %>'
+##    Module: '<%= scope.to_hash['module_name'] %>'
+#
+
+# Redirect stderr so everything ends up in the log file
+exec 2>&1
+
+# Output some info to log the start of this script
+echo "<%= @name %> was finished"
+
+# Set environment variables
+#  Maybe include this later?
+
+# Prefix the final command with exec and ensure it runs in the foreground
+exec <%= @finish_command %>

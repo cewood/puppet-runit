@@ -3,11 +3,11 @@ class runit::install {
   anchor { 'nginx::package::end': }
 
   case $::osfamily {
-    'redhat': {
-      class { '::runit::install::redhat': }
-    }
     'debian': {
       class { '::runit::install::debian': }
+    }
+    'redhat': {
+      class { '::runit::install::redhat': }
     }
     default: {
       case $::operatingsystem {
@@ -28,6 +28,7 @@ class runit::install {
     }
   }
 
+  # Make sure our dependant folders exist already
   file {
     '/etc/service':
       ensure  => directory,

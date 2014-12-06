@@ -8,13 +8,10 @@ class runit (
   #class { '::runit::config': }
   class { '::runit::service': }
 
-  #include ::runit::install
-  #include runit::service
-
-  anchor { 
+  anchor {
     'runit::before':
-      before => Class['::runit::install'],
-      notify => Class['::runit::service'];
+      before  => Class['::runit::install'],
+      notify  => Class['::runit::service'];
     'runit::after':
       require => Class['::runit::service'];
   }

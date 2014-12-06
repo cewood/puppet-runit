@@ -1,0 +1,9 @@
+#!<%= @log_shell %>
+
+### 
+## WARNING: PUPPET MANAGED FILE
+## Served by: '<%= scope.lookupvar('::servername') %>'
+##    Module: '<%= scope.to_hash['module_name'] %>'
+#
+
+exec <%= @log_command %>

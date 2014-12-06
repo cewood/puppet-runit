@@ -36,5 +36,8 @@ class runit::install {
     '/var/lib/service':
       ensure  => directory,
       mode    => '0755';
+    '/var/log/service':
+      ensure  => directory,
+      mode    => '0755';
   }
 }

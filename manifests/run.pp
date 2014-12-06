@@ -5,19 +5,29 @@
 
 define runit::run (
   $command,
-  $shell = '/bin/bash',
-  $down = undef,
-  $finish_shell = '/bin/bash',
-  $finish_command = undef,
-  $log_command = "svlogd -tt /var/log/service/${name}",
-  $log_config = true,
-  $log_shell = '/bin/sh',
+  $symlink               = true,
+  $shell                 = '/bin/bash',
+  $down                  = undef,
+  $finish_shell          = '/bin/bash',
+  $finish_command        = undef,
+  $log_command           = "svlogd -tt",
+  $log_destination       = "/var/log/service/${name}",
+  $log_config            = true,
+  $log_shell             = '/bin/sh',
+  $svlogd_size           = undef,
+  $svlogd_max_files      = undef,
+  $svlogd_min_files      = undef,
+  $svlogd_rotate_timeout = undef,
+  $svlogd_processor      = undef,
+  $svlogd_retransmit     = undef,
+  $svlogd_forward        = undef,
+  $svlogd_prefix         = undef,
 ) {
   anchor {
     "runit::run::${name}::before":
-      before  => File["/var/log/service/${name}"];
+      before  => Anchor["runit::run::${name}::after"];
     "runit::run::${name}::after":
-      require => File['/etc/service/someservice'];
+      require => Anchor["runit::run::${name}::before"];
   }
 
   file {
@@ -38,10 +48,15 @@ define runit::run (
       ensure  => present,
       content => template('runit/log/run.erb'),
       require => File["/var/lib/service/${name}/log"];
+    "${log_destination}":
+      ensure  => directory,
+      require => File["/var/lib/service/${name}/log"],
+      before  => Anchor["runit::run::${name}::after"];
     "/etc/service/${name}":
       ensure  => link,
       target  => "/var/lib/service/${name}",
-      require => File["/var/lib/service/${name}/run"];
+      require => File["/var/lib/service/${name}/run"],
+      before  => Anchor["runit::run::${name}::after"];
   }
 
   if $down {
@@ -58,7 +73,8 @@ define runit::run (
       mode    => '0755',
       ensure  => present,
       content => template('runit/log/config.erb'),
-      require => File["/var/lib/service/${name}/log"];
+      require => File["/var/lib/service/${name}/log"],
+      before  => File["/var/lib/service/${name}/run"];
     }
   }
 

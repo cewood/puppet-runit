@@ -2,15 +2,17 @@
 
 ### 
 ## WARNING: PUPPET MANAGED FILE
-## Served by: '<%= scope.lookupvar('::servername') %>'
-##    Module: '<%= scope.to_hash['module_name'] %>'
+##  Puppet: '<%= scope.lookupvar('::puppetversion') %>'
+##  Facter: '<%= scope.lookupvar('::facterversion') %>'
+##    Ruby: '<%= scope.lookupvar('::rubyversion') %>'
+##  Module: '<%= scope.to_hash['module_name'] %>'
 #
 
 # Redirect stderr so everything ends up in the log file
 exec 2>&1
 
 # Output some info to log the start of this script
-echo "<%= @name %> was started at "
+echo "<%= @name %> was started"
 
 # Set environment variables
 #  Maybe include this later?

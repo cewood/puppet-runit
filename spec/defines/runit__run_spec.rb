@@ -6,12 +6,11 @@ describe 'runit::run' do
     let(:params) { {
       :command => '/bin/somecommand',
     } }
-    it { should compile.with_all_deps }
-    it { should contain_anchor('runit::run::someservice::before').with(
-      'before' => 'Anchor[runit::run::someservice::after]',
+    it { should contain_anchor('runit::run::someservice::begin').with(
+      'before' => 'Anchor[runit::run::someservice::end]',
     ) }
-    it { should contain_anchor('runit::run::someservice::after').with(
-      'require' => 'Anchor[runit::run::someservice::before]'
+    it { should contain_anchor('runit::run::someservice::end').with(
+      'require' => 'Anchor[runit::run::someservice::begin]'
     ) }
     it { should contain_file('/var/lib/service/someservice') }
     it { should contain_file('/var/lib/service/someservice/run') }
@@ -27,7 +26,6 @@ describe 'runit::run' do
       :down           => true,
       :finish_command => '/bin/blah',
     } }
-    it { should compile.with_all_deps }
     it { should contain_file('/var/lib/service/someservice') }
     it { should contain_file('/var/lib/service/someservice/run') }
     it { should contain_file('/var/lib/service/someservice/log') }

@@ -1,6 +1,11 @@
+# Install our packages
 class runit::install {
-  anchor { 'nginx::package::begin': }
-  anchor { 'nginx::package::end': }
+  anchor {
+    'runit::install::begin':
+      before => Anchor['runit::install::end'];
+    'runit::install::end':
+      require => Anchor['runit::install::begin'];
+  }
 
   case $::osfamily {
     'debian': {
@@ -26,18 +31,5 @@ class runit::install {
         }
       }
     }
-  }
-
-  # Make sure our dependant folders exist already
-  file {
-    '/etc/service':
-      ensure  => directory,
-      mode    => '0755';
-    '/var/lib/service':
-      ensure  => directory,
-      mode    => '0755';
-    '/var/log/service':
-      ensure  => directory,
-      mode    => '0755';
   }
 }

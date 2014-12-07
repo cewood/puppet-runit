@@ -24,17 +24,18 @@ define runit::run (
   $svlogd_prefix         = undef,
 ) {
   anchor {
-    "runit::run::${name}::before":
-      before  => Anchor["runit::run::${name}::after"];
-    "runit::run::${name}::after":
-      require => Anchor["runit::run::${name}::before"];
+    "runit::run::${name}::begin":
+      require => Class['runit::install'],
+      before  => Anchor["runit::run::${name}::end"];
+    "runit::run::${name}::end":
+      require => Anchor["runit::run::${name}::begin"];
   }
 
   file {
     "/var/lib/service/${name}":
       ensure  => directory,
-      require => Anchor["runit::run::${name}::before"],
-      before  => Anchor["runit::run::${name}::after"];
+      require => Anchor["runit::run::${name}::begin"],
+      before  => Anchor["runit::run::${name}::end"];
     "/var/lib/service/${name}/run":
       mode    => '0755',
       ensure  => present,
@@ -51,12 +52,16 @@ define runit::run (
     "${log_destination}":
       ensure  => directory,
       require => File["/var/lib/service/${name}/log"],
-      before  => Anchor["runit::run::${name}::after"];
-    "/etc/service/${name}":
+      before  => Anchor["runit::run::${name}::end"];
+  }
+
+  if $symlink {
+    file { "/etc/service/${name}":
       ensure  => link,
       target  => "/var/lib/service/${name}",
       require => File["/var/lib/service/${name}/run"],
-      before  => Anchor["runit::run::${name}::after"];
+      before  => Anchor["runit::run::${name}::end"];
+    }
   }
 
   if $down {

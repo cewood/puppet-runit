@@ -10,12 +10,11 @@ describe 'runit' do
     it { should contain_class('runit') }
     it { should contain_class('runit::install') }
     it { should contain_class('runit::service') }
-    it { should contain_anchor('runit::before').with(
-      'before' => 'Class[Runit::Install]',
-      'notify' => 'Class[Runit::Service]',
+    it { should contain_anchor('runit::begin').with(
+      'before' => 'Anchor[runit::end]',
     ) }
-    it { should contain_anchor('runit::after').with(
-      'require' => 'Class[Runit::Service]'
+    it { should contain_anchor('runit::end').with(
+      'require' => 'Anchor[runit::begin]',
     ) }
   end
 end
